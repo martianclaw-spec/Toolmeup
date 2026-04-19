@@ -1,0 +1,224 @@
+// Tool rental marketplace — MVP schema
+// Postgres + Prisma. Kept intentionally small; extend as features land.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// -------------------------------------------------------------------
+// Enums
+// -------------------------------------------------------------------
+
+enum ListingStatus {
+  ACTIVE
+  PAUSED
+  DELETED
+}
+
+enum HandoffMethod {
+  PICKUP
+  MEETUP
+  DELIVERY
+}
+
+enum RentalStatus {
+  REQUESTED
+  APPROVED
+  DECLINED
+  ACTIVE
+  RETURNED
+  COMPLETED
+  CANCELLED
+}
+
+enum ItemCondition {
+  NEW
+  LIKE_NEW
+  GOOD
+  FAIR
+}
+
+// -------------------------------------------------------------------
+// User
+// -------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String?
+  googleId     String?  @unique
+  name         String
+  photoUrl     String?
+  bio          String?
+  city         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  listings          Listing[]
+  rentalsAsOwner    RentalRequest[] @relation("OwnerRentals")
+  rentalsAsRenter   RentalRequest[] @relation("RenterRentals")
+  cancelledRentals  RentalRequest[] @relation("CancelledRentals")
+  messagesSent      Message[]
+  reviewsWritten    Review[]        @relation("ReviewAuthor")
+  reviewsReceived   Review[]        @relation("ReviewSubject")
+}
+
+// -------------------------------------------------------------------
+// Category (seeded, not user-created)
+// -------------------------------------------------------------------
+
+model Category {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  icon     String?
+  listings Listing[]
+}
+
+// -------------------------------------------------------------------
+// Listing
+// -------------------------------------------------------------------
+// Location fields are split into PUBLIC (safe to return anywhere) and
+// PRIVATE (only surfaced after the owner approves a rental request).
+// The API layer should expose a shared `publicListingSelect` that never
+// includes the private fields, and only read them from the "approved
+// rental detail" endpoint.
+// -------------------------------------------------------------------
+
+model Listing {
+  id          String        @id @default(cuid())
+  ownerId     String
+  categoryId  String
+  title       String
+  description String
+  condition   ItemCondition @default(GOOD)
+
+  dailyRate Decimal @db.Decimal(10, 2)
+  currency  String  @default("USD")
+
+  photos String[]
+
+  // --- Location: PUBLIC ---
+  city      String
+  approxLat Float? // rounded to ~0.01° (~½ mile); populated when the map lands
+  approxLng Float?
+
+  // --- Location: PRIVATE (hide until rental is approved) ---
+  addressLine String?
+  exactLat    Float?
+  exactLng    Float?
+
+  // Handoff options
+  pickupEnabled    Boolean  @default(true)
+  meetupEnabled    Boolean  @default(false)
+  meetupSpot       String?
+  deliveryEnabled  Boolean  @default(false)
+  deliveryRadiusMi Float?
+  deliveryFee      Decimal? @db.Decimal(10, 2)
+
+  status    ListingStatus @default(ACTIVE)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  owner          User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  category       Category        @relation(fields: [categoryId], references: [id])
+  rentalRequests RentalRequest[]
+
+  @@index([categoryId, status])
+  @@index([city, status])
+  @@index([approxLat, approxLng])
+  @@index([ownerId])
+}
+
+// -------------------------------------------------------------------
+// RentalRequest
+// -------------------------------------------------------------------
+
+model RentalRequest {
+  id        String @id @default(cuid())
+  listingId String
+  renterId  String
+  ownerId   String // denormalized for fast "my inbox" queries
+
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+
+  handoffMethod   HandoffMethod
+  deliveryAddress String? // required only when handoffMethod = DELIVERY
+
+  renterNote String?
+  ownerNote  String?
+
+  status RentalStatus @default(REQUESTED)
+
+  // Frozen snapshot of the quoted rental amount at request time.
+  // Do NOT recompute from listing.dailyRate after the fact — the listing
+  // rate can change and this must remain the number both parties agreed to.
+  totalAmount Decimal @db.Decimal(10, 2)
+  currency    String  @default("USD")
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  approvedAt  DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+
+  cancelledByUserId String?
+  cancelReason      String?
+
+  listing      Listing   @relation(fields: [listingId], references: [id])
+  renter       User      @relation("RenterRentals", fields: [renterId], references: [id])
+  owner        User      @relation("OwnerRentals", fields: [ownerId], references: [id])
+  cancelledBy  User?     @relation("CancelledRentals", fields: [cancelledByUserId], references: [id])
+  messages     Message[]
+  reviews      Review[]
+
+  @@index([ownerId, status])
+  @@index([renterId, status])
+  @@index([listingId, status])
+}
+
+// -------------------------------------------------------------------
+// Message (scoped to a rental request)
+// -------------------------------------------------------------------
+
+model Message {
+  id              String    @id @default(cuid())
+  rentalRequestId String
+  senderId        String
+  body            String
+  createdAt       DateTime  @default(now())
+  readAt          DateTime?
+
+  rentalRequest RentalRequest @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
+  sender        User          @relation(fields: [senderId], references: [id])
+
+  @@index([rentalRequestId, createdAt])
+}
+
+// -------------------------------------------------------------------
+// Review (one per direction per rental)
+// -------------------------------------------------------------------
+
+model Review {
+  id              String   @id @default(cuid())
+  rentalRequestId String
+  authorId        String
+  subjectId       String
+  rating          Int // 1..5 — validate in app layer
+  comment         String?
+  createdAt       DateTime @default(now())
+
+  rentalRequest RentalRequest @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
+  author        User          @relation("ReviewAuthor", fields: [authorId], references: [id])
+  subject       User          @relation("ReviewSubject", fields: [subjectId], references: [id])
+
+  @@unique([rentalRequestId, authorId])
+  @@index([subjectId, createdAt])
+}
