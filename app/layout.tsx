@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "For whom the bell Tools",
+  title: "toolmeup",
   description: "A local marketplace for renting and borrowing tools.",
 };
 
@@ -46,7 +46,7 @@ export default async function RootLayout({
               href="/"
               className="mr-auto text-base font-semibold tracking-tight"
             >
-              For whom the bell Tools
+              toolmeup
             </Link>
 
             {user ? (
