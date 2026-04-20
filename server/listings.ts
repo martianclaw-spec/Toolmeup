@@ -1,10 +1,15 @@
 import { prisma } from "@/lib/db";
-import type { ItemCondition, Prisma } from "@prisma/client";
+import type { ItemCondition, ExperienceLevel, Prisma } from "@prisma/client";
 import { resolvePagination, type PaginationInput } from "@/lib/pagination";
 
 export class ListingError extends Error {}
 
 const VALID_CONDITIONS: ItemCondition[] = ["NEW", "LIKE_NEW", "GOOD", "FAIR"];
+const VALID_EXPERIENCE_LEVELS: ExperienceLevel[] = [
+  "BEGINNER_OK",
+  "SOME_EXPERIENCE",
+  "EXPERIENCED_ONLY",
+];
 
 export type CreateListingInput = {
   ownerId: string;
@@ -18,6 +23,9 @@ export type CreateListingInput = {
   meetupEnabled: boolean;
   deliveryEnabled: boolean;
   deliveryFee: number | null;
+  holdingFee: number | null;
+  experienceLevel: string;
+  usageNotes: string | null;
 };
 
 type NormalizedListingFields = {
@@ -30,6 +38,9 @@ type NormalizedListingFields = {
   meetupEnabled: boolean;
   deliveryEnabled: boolean;
   deliveryFee: string | null;
+  holdingFee: string | null;
+  experienceLevel: ExperienceLevel;
+  usageNotes: string | null;
   categoryId: string;
 };
 
@@ -81,6 +92,29 @@ async function normalizeListingFields(
     deliveryFee = input.deliveryFee.toFixed(2);
   }
 
+  let holdingFee: string | null = null;
+  if (input.holdingFee !== null) {
+    if (!Number.isFinite(input.holdingFee) || input.holdingFee < 0) {
+      throw new ListingError("Holding fee must be 0 or more.");
+    }
+    if (input.holdingFee > 100000) {
+      throw new ListingError("Holding fee looks too high — double-check.");
+    }
+    holdingFee = input.holdingFee.toFixed(2);
+  }
+
+  if (
+    !VALID_EXPERIENCE_LEVELS.includes(input.experienceLevel as ExperienceLevel)
+  ) {
+    throw new ListingError("Pick a valid experience level.");
+  }
+
+  const usageNotesRaw = (input.usageNotes ?? "").trim();
+  if (usageNotesRaw.length > 500) {
+    throw new ListingError("Usage notes must be 500 characters or fewer.");
+  }
+  const usageNotes = usageNotesRaw || null;
+
   const category = await prisma.category.findUnique({
     where: { id: input.categoryId },
     select: { id: true },
@@ -97,6 +131,9 @@ async function normalizeListingFields(
     meetupEnabled: input.meetupEnabled,
     deliveryEnabled: input.deliveryEnabled,
     deliveryFee,
+    holdingFee,
+    experienceLevel: input.experienceLevel as ExperienceLevel,
+    usageNotes,
     categoryId: category.id,
   };
 }
@@ -293,6 +330,9 @@ export async function getListingForOwner(id: string, ownerId: string) {
       meetupEnabled: true,
       deliveryEnabled: true,
       deliveryFee: true,
+      holdingFee: true,
+      experienceLevel: true,
+      usageNotes: true,
       categoryId: true,
       status: true,
     },
@@ -317,6 +357,9 @@ export async function getListingById(id: string) {
       meetupEnabled: true,
       deliveryEnabled: true,
       deliveryFee: true,
+      holdingFee: true,
+      experienceLevel: true,
+      usageNotes: true,
       category: { select: { name: true } },
     },
   });

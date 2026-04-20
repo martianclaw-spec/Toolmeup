@@ -44,6 +44,12 @@ enum ItemCondition {
   FAIR
 }
 
+enum ExperienceLevel {
+  BEGINNER_OK
+  SOME_EXPERIENCE
+  EXPERIENCED_ONLY
+}
+
 // -------------------------------------------------------------------
 // User
 // -------------------------------------------------------------------
@@ -121,6 +127,11 @@ model Listing {
   deliveryEnabled  Boolean  @default(false)
   deliveryRadiusMi Float?
   deliveryFee      Decimal? @db.Decimal(10, 2)
+
+  // Trust & safety (owner-declared; not enforced by the platform)
+  holdingFee      Decimal?        @db.Decimal(10, 2)
+  experienceLevel ExperienceLevel @default(BEGINNER_OK)
+  usageNotes      String?
 
   status    ListingStatus @default(ACTIVE)
   createdAt DateTime      @default(now())

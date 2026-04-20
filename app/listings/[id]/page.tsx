@@ -11,6 +11,18 @@ const CONDITION_LABEL = {
   FAIR: "Fair",
 } as const;
 
+const EXPERIENCE_LABEL = {
+  BEGINNER_OK: "Beginner OK",
+  SOME_EXPERIENCE: "Some experience recommended",
+  EXPERIENCED_ONLY: "Experienced users only",
+} as const;
+
+const EXPERIENCE_TONE = {
+  BEGINNER_OK: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  SOME_EXPERIENCE: "border-amber-200 bg-amber-50 text-amber-800",
+  EXPERIENCED_ONLY: "border-red-200 bg-red-50 text-red-800",
+} as const;
+
 export default async function ListingDetailPage({
   params,
   searchParams,
@@ -57,7 +69,7 @@ export default async function ListingDetailPage({
         ← All listings
       </Link>
 
-      <header className="flex flex-col gap-1">
+      <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold tracking-tight">
           {listing.title}
         </h1>
@@ -65,6 +77,11 @@ export default async function ListingDetailPage({
           {listing.category.name} · {CONDITION_LABEL[listing.condition]} ·{" "}
           {listing.city}
         </p>
+        <span
+          className={`w-fit rounded-full border px-2.5 py-0.5 text-xs font-medium ${EXPERIENCE_TONE[listing.experienceLevel]}`}
+        >
+          {EXPERIENCE_LABEL[listing.experienceLevel]}
+        </span>
       </header>
 
       <p className="text-2xl font-medium">
@@ -97,6 +114,69 @@ export default async function ListingDetailPage({
             </HandoffItem>
           )}
         </ul>
+      </section>
+
+      {listing.usageNotes && (
+        <section className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <h2 className="mb-1 text-sm font-semibold text-amber-900">
+            Usage notes from the owner
+          </h2>
+          <p className="whitespace-pre-wrap text-sm text-amber-900">
+            {listing.usageNotes}
+          </p>
+        </section>
+      )}
+
+      {/* Trust & safety block */}
+      <section className="flex flex-col gap-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+        <h2 className="text-sm font-semibold text-neutral-900">
+          Before you rent
+        </h2>
+        <ul className="flex flex-col gap-2 text-sm text-neutral-700">
+          <li>
+            Renters are responsible for returning tools in agreed condition
+            or covering replacement cost.
+          </li>
+          <li>Meet locally and inspect the tool before taking it.</li>
+          <li>
+            Payment is handled directly between renter and owner (cash,
+            Venmo, etc.).
+          </li>
+        </ul>
+
+        {listing.holdingFee !== null && (
+          <div className="mt-1 rounded-md border border-neutral-300 bg-white p-3">
+            <p className="text-sm text-neutral-900">
+              <span className="font-semibold">Holding fee:</span> $
+              {listing.holdingFee.toFixed(2)}
+            </p>
+            <p className="mt-1 text-xs text-neutral-600">
+              This is an agreement between renter and owner. Toolmeup does
+              not process or enforce payments.
+            </p>
+          </div>
+        )}
+      </section>
+
+      {/* How this works — 4 step trust strip */}
+      <section>
+        <h2 className="mb-2 text-sm font-medium text-neutral-700">
+          How this works
+        </h2>
+        <ol className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+          <TrustStep n={1} title="Message before renting">
+            Ask anything you need to know before showing up.
+          </TrustStep>
+          <TrustStep n={2} title="Agree on condition">
+            Confirm the tool&apos;s condition with the owner up front.
+          </TrustStep>
+          <TrustStep n={3} title="Meet locally">
+            Inspect the tool together at pickup, meetup, or delivery.
+          </TrustStep>
+          <TrustStep n={4} title="Leave a review">
+            Help the community by leaving an honest review afterward.
+          </TrustStep>
+        </ol>
       </section>
 
       <hr className="border-neutral-200" />
@@ -196,6 +276,21 @@ export default async function ListingDetailPage({
               />
             </label>
 
+            <label className="flex items-start gap-2 rounded-md border border-neutral-200 bg-neutral-50 p-3 text-sm text-neutral-800">
+              <input
+                type="checkbox"
+                name="safetyAcknowledged"
+                required
+                className="mt-0.5"
+              />
+              <span>I understand how to safely use this tool.</span>
+            </label>
+
+            <p className="text-xs text-neutral-500">
+              Payment is handled directly between renter and owner (cash,
+              Venmo, etc.).
+            </p>
+
             <button
               type="submit"
               className="rounded bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
@@ -213,6 +308,28 @@ function HandoffItem({ children }: { children: React.ReactNode }) {
   return (
     <li className="rounded border border-neutral-300 px-2 py-0.5 text-neutral-700">
       {children}
+    </li>
+  );
+}
+
+function TrustStep({
+  n,
+  title,
+  children,
+}: {
+  n: number;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex items-start gap-3 rounded-md border border-neutral-200 bg-white p-3">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-neutral-900">
+        {n}
+      </span>
+      <div className="flex flex-col gap-0.5">
+        <span className="text-sm font-semibold text-neutral-900">{title}</span>
+        <span className="text-xs text-neutral-600">{children}</span>
+      </div>
     </li>
   );
 }

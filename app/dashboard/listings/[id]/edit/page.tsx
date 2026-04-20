@@ -33,6 +33,7 @@ export default async function EditListingPage({
     const u = await requireUser();
     const dailyRateRaw = formData.get("dailyRate");
     const deliveryFeeRaw = formData.get("deliveryFee");
+    const holdingFeeRaw = formData.get("holdingFee");
 
     try {
       await updateListing(id, u.id, {
@@ -52,6 +53,12 @@ export default async function EditListingPage({
           deliveryFeeRaw === null || deliveryFeeRaw === ""
             ? null
             : Number(deliveryFeeRaw),
+        holdingFee:
+          holdingFeeRaw === null || holdingFeeRaw === ""
+            ? null
+            : Number(holdingFeeRaw),
+        experienceLevel: String(formData.get("experienceLevel") ?? ""),
+        usageNotes: (formData.get("usageNotes") as string | null) || null,
       });
     } catch (err) {
       const message =
@@ -200,6 +207,62 @@ export default async function EditListingPage({
               }
               className="rounded border border-neutral-300 px-3 py-2"
             />
+          </label>
+        </fieldset>
+
+        <fieldset className="flex flex-col gap-3 rounded border border-neutral-200 p-3 text-sm">
+          <legend className="px-1 text-neutral-600">Trust &amp; safety</legend>
+
+          <label className="flex flex-col gap-1 text-sm">
+            Required experience level
+            <select
+              name="experienceLevel"
+              required
+              defaultValue={listing.experienceLevel}
+              className="rounded border border-neutral-300 px-3 py-2"
+            >
+              <option value="BEGINNER_OK">Beginner OK</option>
+              <option value="SOME_EXPERIENCE">Some experience recommended</option>
+              <option value="EXPERIENCED_ONLY">Experienced users only</option>
+            </select>
+            <span className="text-xs text-neutral-500">
+              Helps renters pick tools they&apos;ll handle safely.
+            </span>
+          </label>
+
+          <label className="flex flex-col gap-1 text-sm">
+            Holding fee (optional)
+            <input
+              name="holdingFee"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="e.g. 200"
+              defaultValue={
+                listing.holdingFee !== null ? listing.holdingFee.toFixed(2) : ""
+              }
+              className="rounded border border-neutral-300 px-3 py-2"
+            />
+            <span className="text-xs text-neutral-500">
+              Amount renter agrees to cover if the tool is not returned or
+              is damaged.
+            </span>
+          </label>
+
+          <label className="flex flex-col gap-1 text-sm">
+            Usage notes (optional)
+            <textarea
+              name="usageNotes"
+              rows={3}
+              maxLength={500}
+              placeholder="Watch a tutorial before using. Be careful of kickback."
+              defaultValue={listing.usageNotes ?? ""}
+              className="rounded border border-neutral-300 px-3 py-2"
+            />
+            <span className="text-xs text-neutral-500">
+              Safety tips or anything the renter should know. Up to 500
+              characters.
+            </span>
           </label>
         </fieldset>
 
