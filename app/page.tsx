@@ -100,20 +100,22 @@ export default async function Home({
     <main className="flex flex-col">
       {/* Hero */}
       <section className="border-b border-neutral-200 bg-gradient-to-b from-amber-50 to-white">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-12 sm:py-16">
-          <div className="flex flex-col gap-4">
+        <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-14 sm:py-20">
+          <div className="flex flex-col gap-5">
             <span className="w-fit rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-700">
-              Neighbor-to-neighbor tool rental
+              A local tool rental marketplace
             </span>
             <h1 className="text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl">
-              Tools when you need them.
+              Rent tools from people nearby.
               <br className="hidden sm:block" />{" "}
-              <span className="text-amber-600">From the pros next door.</span>
+              <span className="text-amber-600">
+                Or earn from the ones in your garage.
+              </span>
             </h1>
             <p className="max-w-2xl text-base text-neutral-700 sm:text-lg">
-              Rent drills, saws, ladders, and more by the day — from
-              contractors, handymen, and neighbors in your city. Pickup,
-              meetup, or delivery. Pay only for the days you need it.
+              Whether you&apos;re tackling a weekend project or renting out the
+              tools you already own, toolmeup connects you with people in your
+              neighborhood. Rent by the day. Skip the hardware store.
             </p>
           </div>
 
@@ -122,13 +124,13 @@ export default async function Home({
               href="#listings"
               className="inline-flex items-center justify-center rounded-lg bg-amber-500 px-5 py-3 text-sm font-semibold text-neutral-900 shadow-sm transition-colors hover:bg-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2"
             >
-              Browse tools
+              Find tools near you
             </a>
             <Link
               href="/listings/new"
               className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-900 transition-colors hover:border-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
             >
-              List a tool
+              List your tools
               <span aria-hidden className="ml-2">→</span>
             </Link>
           </div>
@@ -137,61 +139,58 @@ export default async function Home({
 
       {/* Trust strip */}
       <section className="border-b border-neutral-200 bg-white">
-        <ul className="mx-auto grid max-w-5xl grid-cols-1 gap-4 px-4 py-6 sm:grid-cols-3 sm:gap-6">
+        <ul className="mx-auto grid max-w-5xl grid-cols-1 gap-5 px-4 py-8 sm:grid-cols-3 sm:gap-6">
           <li className="flex flex-col gap-1">
-            <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-              Any trade
+            <span className="text-sm font-semibold text-neutral-900">
+              Rent from people near you
             </span>
-            <span className="text-sm text-neutral-700">
-              Drills to jackhammers, ladders to lasers — listed by people
-              who actually use them.
+            <span className="text-sm text-neutral-600">
+              Pickup, meetup, or delivery — right in your city.
             </span>
           </li>
           <li className="flex flex-col gap-1">
-            <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-              By the day
+            <span className="text-sm font-semibold text-neutral-900">
+              Perfect for weekend projects
             </span>
-            <span className="text-sm text-neutral-700">
-              Transparent daily rates. Pay only for the days you use it,
-              with the quote frozen at request time.
+            <span className="text-sm text-neutral-600">
+              Get the right tool for the job, just for the days you need it.
             </span>
           </li>
           <li className="flex flex-col gap-1">
-            <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-              Your call
+            <span className="text-sm font-semibold text-neutral-900">
+              Skip buying expensive tools
             </span>
-            <span className="text-sm text-neutral-700">
-              Pickup, meetup at a spot that works, or delivery right to
-              the jobsite.
+            <span className="text-sm text-neutral-600">
+              Save hundreds — borrow it once, or try it before you buy.
             </span>
           </li>
         </ul>
       </section>
 
       {/* Listings + search */}
-      <section id="listings" className="mx-auto w-full max-w-5xl px-4 py-10">
+      <section id="listings" className="mx-auto w-full max-w-5xl px-4 py-10 sm:py-12">
         <div className="mb-6 flex flex-col gap-1">
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
             Find a tool
           </h2>
           <p className="text-sm text-neutral-600">
-            Search by keyword, filter by city or handoff, and sort by daily
-            rate.
+            Search by keyword, narrow by city, category, or handoff, and set a
+            daily budget.
           </p>
         </div>
 
         <form
           method="get"
-          className="mb-4 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5"
+          className="mb-5 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5"
         >
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <label className="flex flex-col gap-1 text-sm font-medium text-neutral-800 lg:col-span-2">
-              Keyword
+              What do you need?
               <input
                 name="q"
                 type="search"
                 defaultValue={keyword ?? ""}
-                placeholder="drill, ladder, saw…"
+                placeholder="drill, ladder, pressure washer…"
                 className="rounded-lg border border-neutral-300 bg-white px-3 py-2 font-normal text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
               />
             </label>
@@ -216,6 +215,7 @@ export default async function Home({
                 name="city"
                 type="text"
                 defaultValue={city ?? ""}
+                placeholder="Your city"
                 className="rounded-lg border border-neutral-300 bg-white px-3 py-2 font-normal text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
               />
             </label>
@@ -248,7 +248,7 @@ export default async function Home({
                 type="submit"
                 className="rounded-lg bg-neutral-900 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
               >
-                Search
+                Search tools
               </button>
               {hasFilters && (
                 <Link
@@ -270,7 +270,7 @@ export default async function Home({
 
         {total > 0 && (
           <p className="mb-4 text-xs text-neutral-500">
-            {total} {total === 1 ? "listing" : "listings"}
+            {total} {total === 1 ? "tool" : "tools"} available
             {totalPages > 1 && (
               <>
                 {" "}
@@ -285,27 +285,30 @@ export default async function Home({
             <p className="text-sm text-neutral-700">
               {hasFilters ? (
                 <>
-                  No listings match these filters.{" "}
-                  <Link href="/" className="font-medium underline underline-offset-2">
+                  No tools match your search.{" "}
+                  <Link
+                    href="/"
+                    className="font-medium underline underline-offset-2"
+                  >
                     Clear filters
                   </Link>{" "}
-                  or{" "}
+                  and try again, or{" "}
                   <Link
                     href="/listings/new"
                     className="font-medium underline underline-offset-2"
                   >
-                    list your own tool
+                    list one of your own
                   </Link>
                   .
                 </>
               ) : (
                 <>
-                  No listings yet.{" "}
+                  No tools listed yet —{" "}
                   <Link
                     href="/listings/new"
                     className="font-medium underline underline-offset-2"
                   >
-                    List the first tool
+                    be the first to share yours
                   </Link>
                   .
                 </>
@@ -327,13 +330,13 @@ export default async function Home({
                 <li key={l.id}>
                   <Link
                     href={`/listings/${l.id}`}
-                    className="flex h-full flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-neutral-900 hover:shadow-md"
+                    className="flex h-full flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-4 transition-all hover:border-neutral-400 hover:shadow-md"
                   >
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="text-base font-semibold text-neutral-900">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-base font-semibold leading-snug text-neutral-900">
                         {l.title}
                       </h3>
-                      <span className="whitespace-nowrap text-sm font-bold text-amber-700">
+                      <span className="shrink-0 whitespace-nowrap text-sm font-bold text-amber-700">
                         ${l.dailyRate.toFixed(2)}
                         <span className="font-medium text-neutral-500">
                           /day
@@ -341,7 +344,7 @@ export default async function Home({
                       </span>
                     </div>
                     <p className="text-sm text-neutral-600">
-                      {CONDITION_LABEL[l.condition]} · {l.city}
+                      {CONDITION_LABEL[l.condition]} · in {l.city}
                     </p>
                     <div className="mt-auto flex flex-wrap gap-1 pt-2">
                       {l.pickupEnabled && <HandoffBadge label="Pickup" />}
@@ -367,18 +370,18 @@ export default async function Home({
         <div className="mx-auto flex max-w-5xl flex-col items-start gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:py-12">
           <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-              Got tools sitting in the truck?
+              Have tools you rarely use?
             </h2>
             <p className="text-sm text-neutral-300 sm:text-base">
-              Turn idle gear into income. List in minutes, set your own rate,
-              approve every rental.
+              Rent them out to neighbors. Set your own price, pick your
+              availability, approve every request.
             </p>
           </div>
           <Link
             href="/listings/new"
             className="inline-flex items-center justify-center rounded-lg bg-amber-500 px-5 py-3 text-sm font-semibold text-neutral-900 shadow-sm transition-colors hover:bg-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900"
           >
-            List a tool
+            List your tools
             <span aria-hidden className="ml-2">→</span>
           </Link>
         </div>
