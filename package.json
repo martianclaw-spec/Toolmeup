@@ -14,7 +14,7 @@
     "postinstall": "prisma generate"
   },
   "prisma": {
-    "seed": "ts-node --transpile-only --project tsconfig.seed.json prisma/seed.ts"
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.2.0",
@@ -34,7 +34,6 @@
     "eslint-config-next": "16.2.4",
     "prisma": "^6.2.0",
     "tailwindcss": "^4",
-    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
