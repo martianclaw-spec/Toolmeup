@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getListings } from "@/server/listings";
@@ -7,6 +8,42 @@ import {
   parsePage,
 } from "@/lib/pagination";
 import { PaginationNav } from "@/components/pagination";
+
+// Canonical site URL. Update if your production domain changes
+// (e.g. when attaching a custom domain in Vercel).
+const SITE_URL = "https://toolmeup.vercel.app";
+
+export const metadata: Metadata = {
+  title: {
+    // `absolute` bypasses the layout's title template so the homepage
+    // renders the SEO title verbatim instead of "… · toolmeup".
+    absolute: "Rent tools near you | Toolmeup",
+  },
+  description:
+    "Rent drills, saws, ladders, and more from neighbors in your city. Pay by the day — pickup, meetup, or delivery. Or earn by listing the tools in your garage.",
+  alternates: {
+    canonical: SITE_URL,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Toolmeup",
+    url: SITE_URL,
+    title: "Rent tools near you | Toolmeup",
+    description:
+      "A local tool rental marketplace. Rent tools by the day from neighbors in your city, or earn by listing the tools you already own.",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rent tools near you | Toolmeup",
+    description:
+      "A local tool rental marketplace. Rent tools by the day from neighbors in your city, or earn by listing the tools you already own.",
+  },
+};
 
 const CONDITION_LABEL = {
   NEW: "New",
