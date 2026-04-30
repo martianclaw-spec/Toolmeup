@@ -141,7 +141,8 @@ export default async function Home({
               A faster way to rent tools, locally
             </span>
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-neutral-900 sm:text-5xl md:text-6xl">
-              Get the tool you need nearby —{" "}
+              Get the tool you need nearby —
+              <br />
               <span className="text-amber-600">without buying it.</span>
             </h1>
             <p className="max-w-2xl text-base text-neutral-700 sm:text-lg">
@@ -167,7 +168,7 @@ export default async function Home({
           </div>
 
           {/* Trust line + speed-focused supporting line */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-3">
             <p className="text-sm font-medium text-neutral-700">
               Rent from people in your area — not strangers across the
               internet.
@@ -176,6 +177,13 @@ export default async function Home({
               Find tools in minutes · Request and pick up same day · Pickup,
               meetup, or delivery
             </p>
+            <ul className="flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-5 sm:gap-y-1.5">
+              <CompareItem>Cheaper than hardware store rentals</CompareItem>
+              <CompareItem>Closer than driving across town</CompareItem>
+              <CompareItem>
+                Available from people in your neighborhood
+              </CompareItem>
+            </ul>
           </div>
         </div>
       </section>
@@ -220,10 +228,16 @@ export default async function Home({
             <p className="text-sm text-neutral-600">
               Search by keyword, narrow by city, category, or handoff.
             </p>
+            {city && (
+              <p className="text-sm font-medium text-neutral-900">
+                Showing tools near{" "}
+                <span className="text-amber-700">{city}</span>.
+              </p>
+            )}
           </div>
-          {total > 0 && (
+          {total > 10 && (
             <p className="text-xs text-neutral-400">
-              {total} {total === 1 ? "tool" : "tools"} available
+              {total} tools available
               {totalPages > 1 && (
                 <>
                   {" "}
@@ -327,6 +341,10 @@ export default async function Home({
           )}
         </form>
 
+        <p className="mb-4 text-xs text-neutral-500">
+          No commitment — request first, pay after approval.
+        </p>
+
         {/* Example searches — clickable chips. Use the same ?q= URL
             contract as the form so behavior is identical. */}
         <div className="mb-5 flex flex-wrap items-center gap-2 text-xs">
@@ -383,41 +401,52 @@ export default async function Home({
         ) : (
           <>
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {listings.map((l) => (
-                <li key={l.id}>
-                  <Link
-                    href={`/listings/${l.id}`}
-                    className="group flex h-full flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-4 transition-all hover:border-neutral-400 hover:shadow-md"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-base font-semibold leading-snug text-neutral-900 group-hover:text-neutral-900">
-                        {l.title}
-                      </h3>
-                      <span className="shrink-0 whitespace-nowrap text-right">
-                        <span className="text-lg font-extrabold tracking-tight text-amber-700">
-                          ${l.dailyRate.toFixed(2)}
+              {listings.map((l, i) => {
+                // Listings are already ordered newest-first by getListings,
+                // so the first few on page 1 are the most recently added.
+                // Purely positional — no extra DB read needed.
+                const isRecent = currentPage === 1 && i < 3;
+                return (
+                  <li key={l.id}>
+                    <Link
+                      href={`/listings/${l.id}`}
+                      className="group flex h-full flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-4 transition-all hover:border-neutral-400 hover:shadow-md"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-base font-semibold leading-snug text-neutral-900 group-hover:text-neutral-900">
+                          {l.title}
+                          {isRecent && (
+                            <span className="ml-2 inline-block rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 align-middle text-[10px] font-semibold uppercase tracking-wide text-amber-700">
+                              New
+                            </span>
+                          )}
+                        </h3>
+                        <span className="shrink-0 whitespace-nowrap text-right">
+                          <span className="text-lg font-extrabold tracking-tight text-amber-700">
+                            ${l.dailyRate.toFixed(2)}
+                          </span>
+                          <span className="ml-0.5 text-xs font-medium text-neutral-500">
+                            /day
+                          </span>
                         </span>
-                        <span className="ml-0.5 text-xs font-medium text-neutral-500">
-                          /day
+                      </div>
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-600">
+                        <span className="inline-flex items-center gap-1">
+                          <span aria-hidden>📍</span>
+                          {l.city}
                         </span>
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-600">
-                      <span className="inline-flex items-center gap-1">
-                        <span aria-hidden>📍</span>
-                        {l.city}
-                      </span>
-                      <span aria-hidden className="text-neutral-300">·</span>
-                      <span>{CONDITION_LABEL[l.condition]}</span>
-                    </div>
-                    <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
-                      {l.pickupEnabled && <HandoffBadge label="Pickup" />}
-                      {l.meetupEnabled && <HandoffBadge label="Meetup" />}
-                      {l.deliveryEnabled && <HandoffBadge label="Delivery" />}
-                    </div>
-                  </Link>
-                </li>
-              ))}
+                        <span aria-hidden className="text-neutral-300">·</span>
+                        <span>{CONDITION_LABEL[l.condition]}</span>
+                      </div>
+                      <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
+                        {l.pickupEnabled && <HandoffBadge label="Pickup" />}
+                        {l.meetupEnabled && <HandoffBadge label="Meetup" />}
+                        {l.deliveryEnabled && <HandoffBadge label="Delivery" />}
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
 
             <PaginationNav
@@ -555,6 +584,17 @@ function Chip({
     >
       {children}
     </Link>
+  );
+}
+
+function CompareItem({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-start gap-1.5 text-sm text-neutral-700">
+      <span aria-hidden className="mt-0.5 font-bold text-amber-600">
+        ✓
+      </span>
+      <span>{children}</span>
+    </li>
   );
 }
 
