@@ -15,8 +15,6 @@ const SITE_URL = "https://toolmeup.vercel.app";
 
 export const metadata: Metadata = {
   title: {
-    // `absolute` bypasses the layout's title template so the homepage
-    // renders the SEO title verbatim instead of "… · toolmeup".
     absolute: "Rent tools near you | Toolmeup",
   },
   description:
@@ -136,32 +134,28 @@ export default async function Home({
   return (
     <main className="flex flex-col">
       {/* Hero */}
-      <section className="border-b border-neutral-200 bg-gradient-to-b from-amber-50 to-white">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-14 sm:py-20">
+      <section className="border-b border-neutral-200 bg-gradient-to-b from-amber-50 via-amber-50/40 to-white">
+        <div className="mx-auto flex max-w-5xl flex-col gap-7 px-4 py-14 sm:py-20">
           <div className="flex flex-col gap-5">
             <span className="w-fit rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-medium uppercase tracking-wide text-amber-700">
-              A local tool rental marketplace
+              A faster way to rent tools, locally
             </span>
-            <h1 className="text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl">
-              Rent tools from people nearby.
-              <br className="hidden sm:block" />{" "}
-              <span className="text-amber-600">
-                Or earn from the ones in your garage.
-              </span>
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-neutral-900 sm:text-5xl md:text-6xl">
+              Get the tool you need nearby —{" "}
+              <span className="text-amber-600">without buying it.</span>
             </h1>
             <p className="max-w-2xl text-base text-neutral-700 sm:text-lg">
-              Whether you&apos;re tackling a weekend project or renting out the
-              tools you already own, toolmeup connects you with people in your
-              neighborhood. Rent by the day. Skip the hardware store.
+              toolmeup helps you rent tools from people in your area by the
+              day. Search, request, pick up, or get it delivered.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <a
-              href="#listings"
+              href="#search"
               className="inline-flex items-center justify-center rounded-lg bg-amber-500 px-5 py-3 text-sm font-semibold text-neutral-900 shadow-sm transition-colors hover:bg-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2"
             >
-              Find tools near you
+              Find tools near me
             </a>
             <Link
               href="/listings/new"
@@ -171,72 +165,119 @@ export default async function Home({
               <span aria-hidden className="ml-2">→</span>
             </Link>
           </div>
+
+          {/* Trust line + speed-focused supporting line */}
+          <div className="flex flex-col gap-1.5">
+            <p className="text-sm font-medium text-neutral-700">
+              Rent from people in your area — not strangers across the
+              internet.
+            </p>
+            <p className="text-xs text-neutral-500">
+              Find tools in minutes · Request and pick up same day · Pickup,
+              meetup, or delivery
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Trust strip */}
-      <section className="border-b border-neutral-200 bg-white">
-        <ul className="mx-auto grid max-w-5xl grid-cols-1 gap-5 px-4 py-8 sm:grid-cols-3 sm:gap-6">
-          <li className="flex flex-col gap-1">
-            <span className="text-sm font-semibold text-neutral-900">
-              Rent from people near you
-            </span>
-            <span className="text-sm text-neutral-600">
-              Pickup, meetup, or delivery — right in your city.
-            </span>
-          </li>
-          <li className="flex flex-col gap-1">
-            <span className="text-sm font-semibold text-neutral-900">
-              Perfect for weekend projects
-            </span>
-            <span className="text-sm text-neutral-600">
-              Get the right tool for the job, just for the days you need it.
-            </span>
-          </li>
-          <li className="flex flex-col gap-1">
-            <span className="text-sm font-semibold text-neutral-900">
-              Skip buying expensive tools
-            </span>
-            <span className="text-sm text-neutral-600">
-              Save hundreds — borrow it once, or try it before you buy.
-            </span>
-          </li>
-        </ul>
+      {/* Real-life moments */}
+      <section className="border-b border-neutral-200 bg-neutral-50">
+        <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:py-12">
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+            <Moment q="Building a deck this weekend?">
+              Borrow a circular saw from someone three blocks away.
+            </Moment>
+            <Moment q="Need a pressure washer for one day?">
+              There&apos;s probably one two streets over.
+            </Moment>
+            <Moment q="Fixing something at home and missing one tool?">
+              Whatever you&apos;re short, someone nearby has it.
+            </Moment>
+            <Moment q="Helping a friend move and short a furniture dolly?">
+              Find one in your neighborhood. Pick it up on the way.
+            </Moment>
+          </ul>
+        </div>
       </section>
 
-      {/* Listings + search */}
-      <section id="listings" className="mx-auto w-full max-w-5xl px-4 py-10 sm:py-12">
-        <div className="mb-6 flex flex-col gap-1">
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
-            Find a tool
-          </h2>
-          <p className="text-sm text-neutral-600">
-            Search by keyword, narrow by city, category, or handoff, and set a
-            daily budget.
-          </p>
+      {/* Search + listings */}
+      <section
+        id="search"
+        className="mx-auto w-full max-w-5xl px-4 py-10 sm:py-12"
+      >
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-2">
+          <div className="flex flex-col gap-1">
+            <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-amber-700">
+              <span
+                aria-hidden
+                className="inline-block h-2 w-2 rounded-full bg-amber-500"
+              />
+              Tools available nearby — check your area
+            </span>
+            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+              Find a tool
+            </h2>
+            <p className="text-sm text-neutral-600">
+              Search by keyword, narrow by city, category, or handoff.
+            </p>
+          </div>
+          {total > 0 && (
+            <p className="text-xs text-neutral-400">
+              {total} {total === 1 ? "tool" : "tools"} available
+              {totalPages > 1 && (
+                <>
+                  {" "}
+                  · page {Math.min(currentPage, totalPages)} of {totalPages}
+                </>
+              )}
+            </p>
+          )}
         </div>
 
         <form
           method="get"
           className="mb-5 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5"
         >
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <label className="flex flex-col gap-1 text-sm font-medium text-neutral-800 lg:col-span-2">
+          {/* Primary search row — keyword + city + go */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1fr_auto]">
+            <label className="flex flex-col gap-1 text-sm font-medium text-neutral-800">
               What do you need?
               <input
                 name="q"
                 type="search"
                 defaultValue={keyword ?? ""}
                 placeholder="drill, ladder, pressure washer…"
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 font-normal text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 font-normal text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
               />
             </label>
             <label className="flex flex-col gap-1 text-sm font-medium text-neutral-800">
+              City
+              <input
+                name="city"
+                type="text"
+                defaultValue={city ?? ""}
+                placeholder="Your city"
+                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 font-normal text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+              />
+            </label>
+            <div className="flex items-end">
+              <button
+                type="submit"
+                className="h-[42px] w-full rounded-lg bg-neutral-900 px-5 text-sm font-semibold text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 sm:w-auto"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+
+          {/* Secondary filters — collapsed-feeling row */}
+          <div className="mt-4 grid grid-cols-1 gap-3 border-t border-neutral-100 pt-4 sm:grid-cols-3">
+            <label className="flex flex-col gap-1 text-sm text-neutral-700">
               Category
               <select
                 name="category"
                 defaultValue={categorySlug ?? ""}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 font-normal text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
               >
                 <option value="">Any category</option>
                 {categories.map((c) => (
@@ -246,22 +287,12 @@ export default async function Home({
                 ))}
               </select>
             </label>
-            <label className="flex flex-col gap-1 text-sm font-medium text-neutral-800">
-              City
-              <input
-                name="city"
-                type="text"
-                defaultValue={city ?? ""}
-                placeholder="Your city"
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 font-normal text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm font-medium text-neutral-800">
+            <label className="flex flex-col gap-1 text-sm text-neutral-700">
               Handoff
               <select
                 name="handoff"
                 defaultValue={handoffRaw ?? ""}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 font-normal text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
               >
                 <option value="">Any handoff</option>
                 <option value="pickup">Pickup</option>
@@ -269,7 +300,7 @@ export default async function Home({
                 <option value="delivery">Delivery</option>
               </select>
             </label>
-            <label className="flex flex-col gap-1 text-sm font-medium text-neutral-800">
+            <label className="flex flex-col gap-1 text-sm text-neutral-700">
               Max $/day
               <input
                 name="maxRate"
@@ -277,80 +308,69 @@ export default async function Home({
                 min="0"
                 step="0.01"
                 defaultValue={maxRateRaw ?? ""}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 font-normal text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+                placeholder="No limit"
+                className="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
               />
             </label>
-            <div className="flex flex-wrap items-end gap-3 lg:col-span-2">
-              <button
-                type="submit"
-                className="rounded-lg bg-neutral-900 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-              >
-                Search tools
-              </button>
-              {hasFilters && (
-                <Link
-                  href="/"
-                  className="text-sm text-neutral-600 underline underline-offset-2 hover:text-neutral-900"
-                >
-                  Clear filters
-                </Link>
-              )}
-            </div>
           </div>
+
+          {hasFilters && (
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-neutral-500">
+              <span>Filtering by {activeLabels.join(", ")}.</span>
+              <Link
+                href="/"
+                className="text-neutral-700 underline underline-offset-2 hover:text-neutral-900"
+              >
+                Clear filters
+              </Link>
+            </div>
+          )}
         </form>
 
-        {hasFilters && (
-          <p className="mb-2 text-xs text-neutral-500">
-            Filtering by {activeLabels.join(", ")}.
-          </p>
-        )}
-
-        {total > 0 && (
-          <p className="mb-4 text-xs text-neutral-500">
-            {total} {total === 1 ? "tool" : "tools"} available
-            {totalPages > 1 && (
-              <>
-                {" "}
-                · page {Math.min(currentPage, totalPages)} of {totalPages}
-              </>
-            )}
-          </p>
-        )}
+        {/* Example searches — clickable chips. Use the same ?q= URL
+            contract as the form so behavior is identical. */}
+        <div className="mb-5 flex flex-wrap items-center gap-2 text-xs">
+          <span className="font-medium text-neutral-500">Try:</span>
+          <Chip q="drill">Drill</Chip>
+          <Chip q="pressure washer">Pressure washer</Chip>
+          <Chip q="ladder">Ladder</Chip>
+          <Chip q="sander">Sander</Chip>
+          <Chip q="tile saw">Tile saw</Chip>
+        </div>
 
         {total === 0 ? (
           <div className="rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-8 text-center">
-            <p className="text-sm text-neutral-700">
+            <p className="text-base font-semibold text-neutral-900">
+              {hasFilters
+                ? "No tools match your search yet."
+                : "Be one of the first."}
+            </p>
+            <p className="mx-auto mt-1 max-w-md text-sm text-neutral-600">
               {hasFilters ? (
                 <>
-                  No tools match your search.{" "}
+                  Try a broader search or{" "}
                   <Link
                     href="/"
-                    className="font-medium underline underline-offset-2"
+                    className="font-medium text-neutral-900 underline underline-offset-2"
                   >
-                    Clear filters
-                  </Link>{" "}
-                  and try again, or{" "}
-                  <Link
-                    href="/listings/new"
-                    className="font-medium underline underline-offset-2"
-                  >
-                    list one of your own
+                    clear your filters
                   </Link>
                   .
                 </>
               ) : (
                 <>
-                  No tools listed yet —{" "}
-                  <Link
-                    href="/listings/new"
-                    className="font-medium underline underline-offset-2"
-                  >
-                    be the first to share yours
-                  </Link>
-                  .
+                  No tools listed in your area yet — list one of yours and
+                  start earning, or check back as the marketplace grows.
                 </>
               )}
             </p>
+            <Link
+              href="/listings/new"
+              className="mt-4 inline-flex items-center justify-center rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-sm transition-colors hover:bg-amber-400"
+            >
+              List your tool
+              <span aria-hidden className="ml-1.5">→</span>
+            </Link>
           </div>
         ) : isPagePastEnd ? (
           <p className="text-sm text-neutral-600">
@@ -367,23 +387,30 @@ export default async function Home({
                 <li key={l.id}>
                   <Link
                     href={`/listings/${l.id}`}
-                    className="flex h-full flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-4 transition-all hover:border-neutral-400 hover:shadow-md"
+                    className="group flex h-full flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-4 transition-all hover:border-neutral-400 hover:shadow-md"
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-base font-semibold leading-snug text-neutral-900">
+                      <h3 className="text-base font-semibold leading-snug text-neutral-900 group-hover:text-neutral-900">
                         {l.title}
                       </h3>
-                      <span className="shrink-0 whitespace-nowrap text-sm font-bold text-amber-700">
-                        ${l.dailyRate.toFixed(2)}
-                        <span className="font-medium text-neutral-500">
+                      <span className="shrink-0 whitespace-nowrap text-right">
+                        <span className="text-lg font-extrabold tracking-tight text-amber-700">
+                          ${l.dailyRate.toFixed(2)}
+                        </span>
+                        <span className="ml-0.5 text-xs font-medium text-neutral-500">
                           /day
                         </span>
                       </span>
                     </div>
-                    <p className="text-sm text-neutral-600">
-                      {CONDITION_LABEL[l.condition]} · in {l.city}
-                    </p>
-                    <div className="mt-auto flex flex-wrap gap-1 pt-2">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-600">
+                      <span className="inline-flex items-center gap-1">
+                        <span aria-hidden>📍</span>
+                        {l.city}
+                      </span>
+                      <span aria-hidden className="text-neutral-300">·</span>
+                      <span>{CONDITION_LABEL[l.condition]}</span>
+                    </div>
+                    <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
                       {l.pickupEnabled && <HandoffBadge label="Pickup" />}
                       {l.meetupEnabled && <HandoffBadge label="Meetup" />}
                       {l.deliveryEnabled && <HandoffBadge label="Delivery" />}
@@ -402,9 +429,69 @@ export default async function Home({
         )}
       </section>
 
+      {/* How it works */}
+      <section className="border-t border-neutral-200 bg-neutral-50">
+        <div className="mx-auto w-full max-w-5xl px-4 py-12 sm:py-14">
+          <div className="mb-8 flex flex-col gap-1">
+            <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+              How it works
+            </span>
+            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+              From search to return in four steps
+            </h2>
+          </div>
+          <ol className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Step n={1} title="Search for a tool">
+              Find what you need by keyword, city, or category.
+            </Step>
+            <Step n={2} title="Send a rental request">
+              Pick your dates, choose handoff, message the owner.
+            </Step>
+            <Step n={3} title="Pick up, meet, or get delivery">
+              Coordinate locally — pickup, public meetup, or delivery.
+            </Step>
+            <Step n={4} title="Return it when you're done">
+              Drop it back, leave a review, you&apos;re done.
+            </Step>
+          </ol>
+        </div>
+      </section>
+
+      {/* Trust / value */}
+      <section className="border-t border-neutral-200 bg-white">
+        <div className="mx-auto w-full max-w-5xl px-4 py-12 sm:py-14">
+          <div className="mb-8 flex flex-col gap-1">
+            <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+              Why toolmeup
+            </span>
+            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+              Built around local trust
+            </h2>
+          </div>
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <ValueItem title="Owner approves every request">
+              Nothing is rented without the owner saying yes — you&apos;re
+              always in control of your tools.
+            </ValueItem>
+            <ValueItem title="Local pickup, meetup, or delivery">
+              Coordinate the way that works for you and the owner. No shipping,
+              no warehouses.
+            </ValueItem>
+            <ValueItem title="Reviews after every rental">
+              Renters and owners review each other after a completed rental, so
+              the community keeps itself honest.
+            </ValueItem>
+            <ValueItem title="Save money on tools you only need once">
+              Skip the hardware-store markup. Pay for the days you use it,
+              nothing more.
+            </ValueItem>
+          </ul>
+        </div>
+      </section>
+
       {/* Supply-side CTA */}
       <section className="border-t border-neutral-200 bg-neutral-900">
-        <div className="mx-auto flex max-w-5xl flex-col items-start gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:py-12">
+        <div className="mx-auto flex max-w-5xl flex-col items-start gap-4 px-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:py-14">
           <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
               Have tools you rarely use?
@@ -432,5 +519,76 @@ function HandoffBadge({ label }: { label: string }) {
     <span className="rounded-full border border-neutral-300 bg-neutral-50 px-2 py-0.5 text-xs font-medium text-neutral-700">
       {label}
     </span>
+  );
+}
+
+function Moment({
+  q,
+  children,
+}: {
+  q: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex flex-col gap-1.5 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+      <span className="text-sm font-semibold leading-snug text-neutral-900">
+        {q}
+      </span>
+      <span className="text-sm leading-snug text-neutral-600">{children}</span>
+    </li>
+  );
+}
+
+function Chip({
+  q,
+  children,
+}: {
+  q: string;
+  children: React.ReactNode;
+}) {
+  // Hash to #search keeps the user at the search section after the
+  // request, instead of landing back at the top of the homepage.
+  return (
+    <Link
+      href={`/?q=${encodeURIComponent(q)}#search`}
+      className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-medium text-neutral-800 transition-colors hover:border-neutral-900 hover:text-neutral-900"
+    >
+      {children}
+    </Link>
+  );
+}
+
+function Step({
+  n,
+  title,
+  children,
+}: {
+  n: number;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-5">
+      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-sm font-extrabold text-neutral-900">
+        {n}
+      </span>
+      <h3 className="text-base font-semibold text-neutral-900">{title}</h3>
+      <p className="text-sm text-neutral-600">{children}</p>
+    </li>
+  );
+}
+
+function ValueItem({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex flex-col gap-1 rounded-xl border border-neutral-200 bg-neutral-50 p-5">
+      <h3 className="text-base font-semibold text-neutral-900">{title}</h3>
+      <p className="text-sm text-neutral-600">{children}</p>
+    </li>
   );
 }
