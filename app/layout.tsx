@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "toolmeup — rent tools from neighbors",
+    default: "toolmeup, rent tools from neighbors",
     template: "%s · toolmeup",
   },
   description: "A local marketplace for renting and borrowing tools.",
@@ -48,7 +48,7 @@ export default async function RootLayout({
           <nav className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 text-sm">
             <Link
               href="/"
-              aria-label="toolmeup — home"
+              aria-label="toolmeup home"
               className="mr-auto flex items-baseline font-extrabold tracking-tight text-lg leading-none transition-opacity hover:opacity-80"
             >
               <span className="text-neutral-900">tool</span>

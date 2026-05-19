@@ -1,3 +1,5 @@
+// COPY RULE: Do not use em dashes (—) anywhere in UI text. Use periods or line breaks instead.
+
 import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
     absolute: "Rent tools near you | Toolmeup",
   },
   description:
-    "Rent drills, saws, ladders, and more from neighbors in your city. Pay by the day — pickup, meetup, or delivery. Or earn by listing the tools in your garage.",
+    "Rent drills, saws, ladders, and more from neighbors in your city. Pay by the day with pickup, meetup, or delivery. Or earn by listing the tools in your garage.",
   alternates: {
     canonical: SITE_URL,
   },
@@ -141,9 +143,9 @@ export default async function Home({
               A faster way to rent tools, locally
             </span>
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-neutral-900 sm:text-5xl md:text-6xl">
-              Get the tool you need nearby —
+              Get the tool you need nearby.
               <br />
-              <span className="text-amber-600">without buying it.</span>
+              <span className="text-amber-600">Without buying it.</span>
             </h1>
             <p className="max-w-2xl text-base text-neutral-700 sm:text-lg">
               toolmeup helps you rent tools from people in your area by the
@@ -170,7 +172,7 @@ export default async function Home({
           {/* Trust line + speed-focused supporting line */}
           <div className="flex flex-col gap-3">
             <p className="text-sm font-medium text-neutral-700">
-              Rent from people in your area — not strangers across the
+              Rent from people in your area, not strangers across the
               internet.
             </p>
             <p className="text-xs text-neutral-500">
@@ -220,7 +222,7 @@ export default async function Home({
                 aria-hidden
                 className="inline-block h-2 w-2 rounded-full bg-amber-500"
               />
-              Tools available nearby — check your area
+              Tools available nearby. Check your area.
             </span>
             <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
               Find a tool
@@ -342,7 +344,7 @@ export default async function Home({
         </form>
 
         <p className="mb-4 text-xs text-neutral-500">
-          No commitment — request first, pay after approval.
+          No commitment. Request first, pay after approval.
         </p>
 
         {/* Example searches — clickable chips. Use the same ?q= URL
@@ -377,7 +379,7 @@ export default async function Home({
                 </>
               ) : (
                 <>
-                  No tools listed in your area yet — list one of yours and
+                  No tools listed in your area yet. List one of yours and
                   start earning, or check back as the marketplace grows.
                 </>
               )}
@@ -477,7 +479,7 @@ export default async function Home({
               Pick your dates, choose handoff, message the owner.
             </Step>
             <Step n={3} title="Pick up, meet, or get delivery">
-              Coordinate locally — pickup, public meetup, or delivery.
+              Coordinate locally with pickup, public meetup, or delivery.
             </Step>
             <Step n={4} title="Return it when you're done">
               Drop it back, leave a review, you&apos;re done.
@@ -499,7 +501,7 @@ export default async function Home({
           </div>
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <ValueItem title="Owner approves every request">
-              Nothing is rented without the owner saying yes — you&apos;re
+              Nothing is rented without the owner saying yes. You&apos;re
               always in control of your tools.
             </ValueItem>
             <ValueItem title="Local pickup, meetup, or delivery">

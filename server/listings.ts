@@ -64,7 +64,7 @@ async function normalizeListingFields(
     throw new ListingError("Daily rate must be greater than 0.");
   }
   if (input.dailyRate > 10000) {
-    throw new ListingError("Daily rate looks too high — double-check.");
+    throw new ListingError("Daily rate looks too high. Double-check.");
   }
 
   if (!VALID_CONDITIONS.includes(input.condition as ItemCondition)) {
@@ -87,7 +87,7 @@ async function normalizeListingFields(
       );
     }
     if (input.deliveryFee > 10000) {
-      throw new ListingError("Delivery fee looks too high — double-check.");
+      throw new ListingError("Delivery fee looks too high. Double-check.");
     }
     deliveryFee = input.deliveryFee.toFixed(2);
   }
@@ -98,7 +98,7 @@ async function normalizeListingFields(
       throw new ListingError("Holding fee must be 0 or more.");
     }
     if (input.holdingFee > 100000) {
-      throw new ListingError("Holding fee looks too high — double-check.");
+      throw new ListingError("Holding fee looks too high. Double-check.");
     }
     holdingFee = input.holdingFee.toFixed(2);
   }

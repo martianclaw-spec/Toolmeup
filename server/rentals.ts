@@ -230,7 +230,7 @@ export async function approveRentalRequest(
   });
   if (result.count === 0) {
     throw new RentalError(
-      "Can't approve this request — it may no longer be pending.",
+      "Can't approve this request. It may no longer be pending.",
     );
   }
 }
@@ -247,7 +247,7 @@ export async function declineRentalRequest(
   });
   if (result.count === 0) {
     throw new RentalError(
-      "Can't decline this request — it may no longer be pending.",
+      "Can't decline this request. It may no longer be pending.",
     );
   }
 }
@@ -276,7 +276,7 @@ export async function markRentalReturned(rentalId: string, userId: string) {
   });
   if (result.count === 0) {
     throw new RentalError(
-      "Can't mark this as returned — check the current status.",
+      "Can't mark this as returned. Check the current status.",
     );
   }
 }
@@ -292,7 +292,7 @@ export async function markRentalCompleted(rentalId: string, userId: string) {
   });
   if (result.count === 0) {
     throw new RentalError(
-      "Can't mark this as completed — it must be RETURNED first.",
+      "Can't mark this as completed. It must be RETURNED first.",
     );
   }
 }
@@ -335,7 +335,7 @@ export async function cancelRentalRequest(
   });
   if (result.count === 0) {
     throw new RentalError(
-      "Can't cancel this rental — check the current status.",
+      "Can't cancel this rental. Check the current status.",
     );
   }
 }
